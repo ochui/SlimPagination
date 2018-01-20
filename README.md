@@ -5,26 +5,26 @@ simple pagination for slim3
 
  PHP 7.0 or higher
  
- Slim 3.0
+ Slim 3.0 or higher
  
 ## Installation
 via composer:
 `composer require xandros15/slim-pagination`
 ## Basic Usage
-
+These example assume that you are using eloqent Database Model
 Create a object of pagination inside of controller callback, fetch it into string via renderer and pass it as variable:
 
 ```php
 <?php
  use Xandros15\SlimPagination\Pagination;
  $app->get('/users', function (Request $request, Response $response) {
- $users = User::search($request);
+ $users = User::all();
  $pagination = new Pagination($request, $this->get('router'),[
                 Pagination::OPT_TOTAL => count($users), //number of items
             ]);
- $paginationString = $this-view->fetch('pagination', ['pagination' => $pagination]);
- return $this->view->render('user.index', ['pagination' => $paginationString]);
- })->name('user.index');
+ $this-view->getEnvironment()->addGlobal('pagination', $pagination);
+ return $this->view->render($response, 'pagination.html');
+ })->setName('user.index');
 
 ```
 
